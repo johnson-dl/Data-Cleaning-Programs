@@ -1,0 +1,22 @@
+#This code takes .txt files generated from the Superlab program, used frequently in psychology experiments, and converts them
+#to csv files for more seamless data pre-processing.
+
+#Set directories - where .txt files are and where you want converted csv files to go
+txt_files <- #insert directory
+csv_files <- #insert directory
+  
+  
+participant_file <- list.files(txt_files, pattern = "txt") #detect .txt files in directory
+participant_to_read <- paste(txt_files, participant_file, sep = "/")
+participant_to_write <- paste(csv_files, paste0(sub(".txt", "",participant_file),".csv"), sep = "/")
+
+#Write in each .txt file, convert to csv, then save new file
+for (i in 1:length(participant_to_read)){
+  temp <- (read.table(participant_to_read[i], sep = "\t", fill = TRUE))
+  write.csv(temp, file = participant_to_write[i])
+}
+
+#bring in csv files to begin cleaning process
+setwd(csv_files)
+participant_csv <- list.files(pattern = ".*.csv") #detect all .txt files in directory and make them into a list
+list_of_csvs <- lapply(participant_csv, function(x)read.csv(x)) #read in each .txt file
